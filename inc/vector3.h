@@ -1,67 +1,65 @@
 #pragma once
 
-
-
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-//---------header start---------------
+    //---------header start---------------
 
 #include "stdint.h"
 
+    typedef struct
+    {
+        float x, y, z;
+    } Vector3;
 
-typedef struct
-{
-    float x, y, z;
-} Vector3;
+    // ç‚¹ä¹˜
+    float Vector3_Dot(const Vector3 *v1, const Vector3 *v2);
 
-//µã³Ë
-float Vector3_Dot(const Vector3* v1, const Vector3* v2);
+    // å‰ä¹˜,outå¯ä»¥ä¸ºv1æˆ–v2
+    Vector3 *Vector3_Cross(const Vector3 *v1, const Vector3 *v2, Vector3 *out);
 
-//²æ³Ë,out¿ÉÒÔÎªv1»òv2
-Vector3* Vector3_Cross(const Vector3* v1, const Vector3* v2, Vector3* out);
+    // å–æ¨¡
+    float Vector3_Magnitude(const Vector3 *v);
 
-//È¡Ä£
-float Vector3_Magnitude(const Vector3* v);
+    // æ¨¡çš„å¹³æ–¹
+    float Vector3_SqrMagnitude(const Vector3 *v);
 
-//Ä£µÄÆ½·½
-float Vector3_SqrMagnitude(const Vector3* v);
+    // æ ‡å‡†åŒ–
+    void Vector3_Normalize(Vector3 *v);
 
-//±ê×¼»¯
-void Vector3_Normalize(Vector3* v);
+    // æ ‡é‡ä¹˜,outå¯ä»¥ä¸ºv
+    Vector3 *Vector3_Scale(const Vector3 *v, float s, Vector3 *out);
 
-//±êÁ¿³Ë,out¿ÉÒÔÎªv
-Vector3* Vector3_Scale(const Vector3* v, float s, Vector3* out);
+    // åˆ†é‡ç›¸ä¹˜,outå¯ä»¥ä¸ºv1æˆ–v2
+    Vector3 *Vector3_Multiply(const Vector3 *v1, const Vector3 *v2, Vector3 *out);
 
-//·ÖÁ¿Ïà³Ë,out¿ÉÒÔÎªv1»òv2
-Vector3* Vector3_Multiply(const Vector3* v1, const Vector3* v2, Vector3* out);
+    // åˆ†é‡ç›¸åŠ ,outå¯ä»¥ä¸ºv1æˆ–v2
+    Vector3 *Vector3_Add(const Vector3 *v1, const Vector3 *v2, Vector3 *out);
 
-//·ÖÁ¿Ïà¼Ó,out¿ÉÒÔÎªv1»òv2
-Vector3* Vector3_Add(const Vector3* v1, const Vector3* v2, Vector3* out);
+    // åˆ†é‡ç›¸å‡,outå¯ä»¥ä¸ºv1æˆ–v2
+    Vector3 *Vector3_Subtract(const Vector3 *v1, const Vector3 *v2, Vector3 *out);
 
-//·ÖÁ¿Ïà¼õ,out¿ÉÒÔÎªv1»òv2
-Vector3* Vector3_Subtract(const Vector3* v1, const Vector3* v2, Vector3* out);
+    // è®¡ç®—å‘é‡å¤¹è§’
+    float Vector3_Radian(const Vector3 *v1, const Vector3 *v2);
 
-//¼ÆËãÏòÁ¿¼Ğ½Ç
-float Vector3_Radian(const Vector3* v1, const Vector3* v2);
+    // åŒä¸Š,ä½†è¿”å›coså€¼
+    float Vector3_Cos(const Vector3 *v1, const Vector3 *v2);
 
-//Í¬ÉÏ,µ«·µ»ØcosÖµ
-float Vector3_Cos(const Vector3* v1, const Vector3* v2);
+    // ä»v1åˆ°v2æŠ•å½±,outå¯ä»¥ä¸ºv1æˆ–v2
+    Vector3 *Vector3_Project(const Vector3 *v1, const Vector3 *v2, Vector3 *out);
 
-//´Óv1µ½v2Í¶Ó°,out¿ÉÒÔÎªv1»òv2
-Vector3* Vector3_Project(const Vector3* v1, const Vector3* v2, Vector3* out);
+    // ä»v1åˆ°normalæ‰€åœ¨å¹³é¢æŠ•å½±,outå¯ä»¥ä¸ºv1æˆ–normal
+    Vector3 *Vector3_ProjectOnPlane(const Vector3 *v1, const Vector3 *normal, Vector3 *out);
 
-//´Óv1µ½normalËùÔÚÆ½ÃæÍ¶Ó°,out¿ÉÒÔÎªv1»ònormal
-Vector3* Vector3_ProjectOnPlane(const Vector3* v1, const Vector3* normal, Vector3* out);
+    // åˆ¤æ–­ç›¸ç­‰
+    uint8_t Vector3_Equal(const Vector3 *v1, const Vector3 *v2);
 
-//ÅĞ¶ÏÏàµÈ
-uint8_t Vector3_Equal(const Vector3* v1, const Vector3* v2);
+    // æ‰“å°
+    char *Vector3_ToString(const Vector3 *v, char *buff);
 
-//´òÓ¡
-char* Vector3_ToString(const Vector3* v, char* buff);
-
-//----------header end--------------   
+    //----------header end--------------
 
 #ifdef __cplusplus
 }

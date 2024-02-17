@@ -9,7 +9,7 @@
 
 void IdentityTest(void)
 {
-    //正确数据测试
+    //姝ｇ‘鏁版嵁娴嬭瘯
     for (int i = 1; i < MAX_TEST_SIZE; i++)
     {
         Matrix m;
@@ -281,7 +281,7 @@ void ScaleTest()
 
 
         Matrix_Copy(&m, &out);
-        Matrix_Scale(&out, s, &out); //自身scale
+        Matrix_Scale(&out, s, &out); //鑷韩scale
 
         for (int i = 0; i < rowSize; i++)
         {

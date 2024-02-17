@@ -1,50 +1,48 @@
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-//---------header start---------------
+    //---------header start---------------
 
 #include "mathex.h"
 #include "vector3.h"
 #include "stdint.h"
 
+    typedef struct
+    {
+        float x, y, z, w;
 
-typedef struct
-{
-    float x, y, z, w;
+        float mat[3][3]; // æ—‹è½¬çŸ©é˜µ
+    } Quaternion;
 
-    float mat[3][3]; //Ğı×ª¾ØÕó
-} Quaternion;
+    // å–æ‘¸
+    float Quaternion_Magnitude(const Quaternion *q);
 
-//È¡Ãş
-float Quaternion_Magnitude(const Quaternion* q);
+    // æ ‡å‡†åŒ–
+    void Quaternion_Normalize(Quaternion *q);
 
-//±ê×¼»¯
-void Quaternion_Normalize(Quaternion* q);
+    // è½¬æ¢ä¸ºè½´å’Œå¼§åº¦
+    void Quaternion_ToRadianAxis(Quaternion *q, Vector3 *axis, float *theta);
 
-//×ª»»ÎªÖáºÍ»¡¶È
-void Quaternion_ToRadianAxis(Quaternion* q, Vector3* axis, float* theta);
+    // ä»è½´-å¼§åº¦è·å–å››å…ƒæ•°
+    void Quaternion_FromRadianAxis(Quaternion *q, Vector3 *axis, float theta, uint8_t normalized);
 
-//´ÓÖá-»¡¶È»ñÈ¡ËÄÔªÊı
-void Quaternion_FromRadianAxis(Quaternion* q, Vector3* axis, float theta, uint8_t normalized);
+    // æ—‹è½¬v,outå¯ä»¥æ˜¯v
+    void Quaternion_Rotate(const Quaternion *q, const Vector3 *v, Vector3 *out);
 
-//Ğı×ªv,out¿ÉÒÔÊÇv
-void Quaternion_Rotate(const Quaternion* q, const Vector3* v, Vector3* out);
+    // ç›¸ä¹˜,outä¸èƒ½ä¸ºNULL,å¯ä»¥ä¸ºq1æˆ–q2æˆ–å…¶ä»–å€¼
+    void Quaternion_Multiply(const Quaternion *q1, const Quaternion *q2, Quaternion *out);
 
-//Ïà³Ë,out²»ÄÜÎªNULL,¿ÉÒÔÎªq1»òq2»òÆäËûÖµ
-void Quaternion_Multiply(const Quaternion* q1, const Quaternion* q2, Quaternion* out);
+    // åˆ¤æ–­ç›¸ç­‰
+    uint8_t Quaternion_Equal(const Quaternion *q1, const Quaternion *q2);
 
-//ÅĞ¶ÏÏàµÈ
-uint8_t Quaternion_Equal(const Quaternion* q1, const Quaternion* q2);
+    void Quaternion_ToString(const Quaternion *q, char *buff);
 
-void Quaternion_ToString(const Quaternion* q, char* buff);
-
-//----------header end--------------
+    //----------header end--------------
 
 #ifdef __cplusplus
 }
 #endif
-
-

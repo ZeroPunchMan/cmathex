@@ -1,34 +1,36 @@
 #pragma once
 
-
-
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-//---------header start---------------
+    //---------header start---------------
 
 #include "math.h"
 
-#define INFINIT_SMALL   (0.000001f)
+#if !defined(M_PI)
+#define M_PI (3.1415926f)
+#endif
 
-//≈–∂œ∏°µ„ ˝œ‡µ»
-#define FLOAT_EQUAL(f1, f2)     (fabs(f1 - f2) < INFINIT_SMALL)
+#define INFINIT_SMALL (0.000001f)
 
-//≈–∂œ∏°µ„ ˝Ω”Ω¸
+// Âà§Êñ≠ÊµÆÁÇπÊï∞Áõ∏Á≠â
+#define FLOAT_EQUAL(f1, f2) (fabs(f1 - f2) < INFINIT_SMALL)
+
+// Âà§Êñ≠ÊµÆÁÇπÊï∞Êé•Ëøë
 #define FLOAT_NEAR(f1, f2, tolerance) (fabs(f1 - f2) < tolerance)
 
-//Ω«∂»◊™Œ™ª°∂»
-#define ANGLE_TO_RADIAN(angle)          ((float)angle * M_PI / 180.0f)
+// ËßíÂ∫¶ËΩ¨‰∏∫ÂºßÂ∫¶
+#define ANGLE_TO_RADIAN(angle) ((float)angle * M_PI / 180.0f)
 
-//ª°∂»◊™Œ™Ω«∂»
-#define RADIAN_TO_ANGLE(radian)         (radian * 180 / M_PI)   
+// ÂºßÂ∫¶ËΩ¨‰∏∫ËßíÂ∫¶
+#define RADIAN_TO_ANGLE(radian) (radian * 180 / M_PI)
 
-//÷ÿ¡¶
-#define GRAVITY       (9.80665f)
+// ÈáçÂäõ
+#define GRAVITY (9.80665f)
 
-//----------header end--------------
-
+    //----------header end--------------
 
 #ifdef __cplusplus
 }

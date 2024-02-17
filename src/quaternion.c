@@ -1,7 +1,7 @@
 #include "quaternion.h"
 #include "stdio.h"
 
-static void UpdateMatrix(Quaternion* q)
+static void UpdateMatrix(Quaternion *q)
 {
     q->mat[0][0] = 1 - 2 * (q->y * q->y + q->z * q->z);
     q->mat[0][1] = 2 * (q->x * q->y - q->w * q->z);
@@ -16,17 +16,12 @@ static void UpdateMatrix(Quaternion* q)
     q->mat[2][2] = 1 - 2 * (q->x * q->x + q->y * q->y);
 }
 
-
-float Quaternion_Magnitude(const Quaternion* q)
+float Quaternion_Magnitude(const Quaternion *q)
 {
-    return sqrtf(q->x * q->x
-        + q->y * q->y
-        + q->z * q->z
-        + q->w * q->w);
+    return sqrtf(q->x * q->x + q->y * q->y + q->z * q->z + q->w * q->w);
 }
 
-
-void Quaternion_Normalize(Quaternion* q)
+void Quaternion_Normalize(Quaternion *q)
 {
     float s = 1.0f / Quaternion_Magnitude(q);
 
@@ -38,7 +33,7 @@ void Quaternion_Normalize(Quaternion* q)
     UpdateMatrix(q);
 }
 
-void Quaternion_ToRadianAxis(Quaternion* q, Vector3* axis, float* theta)
+void Quaternion_ToRadianAxis(Quaternion *q, Vector3 *axis, float *theta)
 {
     *theta = acosf(q->w) * 2;
 
@@ -49,7 +44,7 @@ void Quaternion_ToRadianAxis(Quaternion* q, Vector3* axis, float* theta)
     Vector3_Normalize(axis);
 }
 
-void Quaternion_FromRadianAxis(Quaternion* q, Vector3* axis, float theta, uint8_t normalized)
+void Quaternion_FromRadianAxis(Quaternion *q, Vector3 *axis, float theta, uint8_t normalized)
 {
     float cosHalfTheta, sinHalfTheta, halfTheta;
     if (!normalized)
@@ -67,8 +62,7 @@ void Quaternion_FromRadianAxis(Quaternion* q, Vector3* axis, float theta, uint8_
     UpdateMatrix(q);
 }
 
-
-void Quaternion_Rotate(const Quaternion* q, const Vector3* v, Vector3* out)
+void Quaternion_Rotate(const Quaternion *q, const Vector3 *v, Vector3 *out)
 {
     float x, y, z;
     x = q->mat[0][0] * v->x + q->mat[0][1] * v->y + q->mat[0][2] * v->z;
@@ -80,13 +74,13 @@ void Quaternion_Rotate(const Quaternion* q, const Vector3* v, Vector3* out)
     out->z = z;
 }
 
-void Quaternion_Multiply(const Quaternion* q1, const Quaternion* q2, Quaternion* out)
+void Quaternion_Multiply(const Quaternion *q1, const Quaternion *q2, Quaternion *out)
 {
     Vector3 v;
     float w;
-    w = q1->w * q2->w - Vector3_Dot((Vector3*)q1, (Vector3*)q2);
+    w = q1->w * q2->w - Vector3_Dot((Vector3 *)q1, (Vector3 *)q2);
 
-    Vector3_Cross((Vector3*)q1, (Vector3*)q2, &v);
+    Vector3_Cross((Vector3 *)q1, (Vector3 *)q2, &v);
 
     v.x += q1->w * q2->x + q2->w * q1->x;
     v.y += q1->w * q2->y + q2->w * q1->y;
@@ -100,7 +94,7 @@ void Quaternion_Multiply(const Quaternion* q1, const Quaternion* q2, Quaternion*
     UpdateMatrix(out);
 }
 
-uint8_t Quaternion_Equal(const Quaternion* q1, const Quaternion* q2)
+uint8_t Quaternion_Equal(const Quaternion *q1, const Quaternion *q2)
 {
     float x, y, z, w;
     float sqrMagnitude;
@@ -113,8 +107,7 @@ uint8_t Quaternion_Equal(const Quaternion* q1, const Quaternion* q2)
     return FLOAT_EQUAL(sqrMagnitude, 0);
 }
 
-void Quaternion_ToString(const Quaternion* q, char* buff)
+void Quaternion_ToString(const Quaternion *q, char *buff)
 {
     sprintf(buff, "{%.2f, (%.2f, %.2f, %.2f)}", q->w, q->x, q->y, q->z);
 }
-

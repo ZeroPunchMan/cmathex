@@ -1,73 +1,73 @@
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-//---------header start---------------
+    //---------header start---------------
 
 #include "mathex.h"
 #include "stdint.h"
 
-#ifndef  MAT_FLOAT
+#ifndef MAT_FLOAT
 #define MAT_FLOAT double
 #endif // ! MAT_FLOAT
 
-//¾ØÕóĞĞÁĞµÄË÷Òı´Ó0¿ªÊ¼,µ½row-1ºÍcol-1
-typedef struct {
-    uint8_t row, col;
-    MAT_FLOAT* data;
-} Matrix;
+    // çŸ©é˜µè¡Œåˆ—çš„ç´¢å¼•ä»0å¼€å§‹,åˆ°row-1å’Œcol-1
+    typedef struct
+    {
+        uint8_t row, col;
+        MAT_FLOAT *data;
+    } Matrix;
 
-//define a matrix with a data array
-#define MAT_DEF(name, rowSize, colSize) \
-MAT_FLOAT name##_mat_data[rowSize * colSize]; \
-Matrix name = {rowSize, colSize, name##_mat_data};
+// define a matrix with a data array
+#define MAT_DEF(name, rowSize, colSize)           \
+    MAT_FLOAT name##_mat_data[rowSize * colSize]; \
+    Matrix name = {rowSize, colSize, name##_mat_data};
 
-//indexer; M[r][c]
+// indexer; M[r][c]
 #define MAT_IDX(m, r, c) \
-((m).data[r * (m).col + c])
+    ((m).data[r * (m).col + c])
 
-// matrix = I 
-uint8_t Matrix_Identity(Matrix* m);
+    // matrix = I
+    uint8_t Matrix_Identity(Matrix *m);
 
-// ÅĞ¶ÏÏàµÈ,Ã¿Ò»Ïî¶¼·Ç³£½Ó½üÊ±,ÈÏÎªÏàµÈ
-uint8_t Matrix_Equal(Matrix* m1, Matrix* m2, MAT_FLOAT tolerance);
+    // åˆ¤æ–­ç›¸ç­‰,æ¯ä¸€é¡¹éƒ½éå¸¸æ¥è¿‘æ—¶,è®¤ä¸ºç›¸ç­‰
+    uint8_t Matrix_Equal(Matrix *m1, Matrix *m2, MAT_FLOAT tolerance);
 
-// copy: src -> dst
-uint8_t Matrix_Copy(Matrix* src, Matrix* dst);
+    // copy: src -> dst
+    uint8_t Matrix_Copy(Matrix *src, Matrix *dst);
 
-// out = m1 + m2; outÒ²¿ÉÒÔÎªm1»òm2
-uint8_t Matrix_Add(Matrix* m1, Matrix* m2, Matrix* out);
+    // out = m1 + m2; outä¹Ÿå¯ä»¥ä¸ºm1æˆ–m2
+    uint8_t Matrix_Add(Matrix *m1, Matrix *m2, Matrix *out);
 
-// out = m1 - m2; outÒ²¿ÉÒÔÎªm1»òm2
-uint8_t Matrix_Sub(Matrix* m1, Matrix* m2, Matrix* out);
+    // out = m1 - m2; outä¹Ÿå¯ä»¥ä¸ºm1æˆ–m2
+    uint8_t Matrix_Sub(Matrix *m1, Matrix *m2, Matrix *out);
 
-// m *= s; out¿ÉÒÔÎªm
-void Matrix_Scale(Matrix* m, MAT_FLOAT scale, Matrix* out);
+    // m *= s; outå¯ä»¥ä¸ºm
+    void Matrix_Scale(Matrix *m, MAT_FLOAT scale, Matrix *out);
 
-// out = m1 * m2; out²»ÄÜÎªm1 or m2
-uint8_t Matrix_Multiply(Matrix* m1, Matrix* m2, Matrix* out);
+    // out = m1 * m2; outä¸èƒ½ä¸ºm1 or m2
+    uint8_t Matrix_Multiply(Matrix *m1, Matrix *m2, Matrix *out);
 
-// out = m^T; out¿ÉÒÔÎªm
-uint8_t Matrix_Transpose(Matrix* m, Matrix* out);
+    // out = m^T; outå¯ä»¥ä¸ºm
+    uint8_t Matrix_Transpose(Matrix *m, Matrix *out);
 
-// m = m^T
-uint8_t Matrix_SelfTranspose(Matrix* m);
+    // m = m^T
+    uint8_t Matrix_SelfTranspose(Matrix *m);
 
-// out = m^-1;Ê¹ÓÃGauss-Jordan method£¬m»á±»ĞŞ¸ÄÎªI;out²»¿ÉÎªm
-uint8_t Matrix_Inverse(Matrix* m, Matrix* out);
+    // out = m^-1;ä½¿ç”¨Gauss-Jordan methodï¼Œmä¼šè¢«ä¿®æ”¹ä¸ºI;outä¸å¯ä¸ºm
+    uint8_t Matrix_Inverse(Matrix *m, Matrix *out);
 
-//tostring
-char* Matrix_ToString(Matrix* m, char* buff, char* seperator);
+    // tostring
+    char *Matrix_ToString(Matrix *m, char *buff, char *seperator);
 
-//ĞĞ×î¼ò
-uint8_t Matrix_RREF(Matrix* m, MAT_FLOAT* solution);
+    // è¡Œæœ€ç®€
+    uint8_t Matrix_RREF(Matrix *m, MAT_FLOAT *solution);
 
-//----------header end--------------
+    //----------header end--------------
 
 #ifdef __cplusplus
 }
 #endif
-
-

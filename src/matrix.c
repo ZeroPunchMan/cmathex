@@ -2,7 +2,7 @@
 #include "stdio.h"
 #include "string.h"
 
-uint8_t Matrix_Identity(Matrix* m)
+uint8_t Matrix_Identity(Matrix *m)
 {
     if (m->row != m->col)
     {
@@ -30,7 +30,7 @@ uint8_t Matrix_Identity(Matrix* m)
     return 1;
 }
 
-uint8_t Matrix_Copy(Matrix* src, Matrix* dst)
+uint8_t Matrix_Copy(Matrix *src, Matrix *dst)
 {
     if (dst->row != src->row || dst->col != src->col)
         return 0;
@@ -49,7 +49,7 @@ uint8_t Matrix_Copy(Matrix* src, Matrix* dst)
     return 1;
 }
 
-uint8_t Matrix_Equal(Matrix* m1, Matrix* m2, MAT_FLOAT tolerance)
+uint8_t Matrix_Equal(Matrix *m1, Matrix *m2, MAT_FLOAT tolerance)
 {
     if (m1->row != m2->row || m1->col != m2->col)
         return 0;
@@ -69,10 +69,9 @@ uint8_t Matrix_Equal(Matrix* m1, Matrix* m2, MAT_FLOAT tolerance)
     return 1;
 }
 
-uint8_t Matrix_Add(Matrix* m1, Matrix* m2, Matrix* out)
+uint8_t Matrix_Add(Matrix *m1, Matrix *m2, Matrix *out)
 {
-    if (m2->row != m1->row || out->row != m1->row
-        || m2->col != m1->col || out->col != m1->col)
+    if (m2->row != m1->row || out->row != m1->row || m2->col != m1->col || out->col != m1->col)
         return 0;
 
     uint8_t row, col;
@@ -89,10 +88,9 @@ uint8_t Matrix_Add(Matrix* m1, Matrix* m2, Matrix* out)
     return 1;
 }
 
-uint8_t Matrix_Sub(Matrix* m1, Matrix* m2, Matrix* out)
+uint8_t Matrix_Sub(Matrix *m1, Matrix *m2, Matrix *out)
 {
-    if (m2->row != m1->row || out->row != m1->row
-        || m2->col != m1->col || out->col != m1->col)
+    if (m2->row != m1->row || out->row != m1->row || m2->col != m1->col || out->col != m1->col)
         return 0;
 
     uint8_t row, col;
@@ -109,7 +107,7 @@ uint8_t Matrix_Sub(Matrix* m1, Matrix* m2, Matrix* out)
     return 1;
 }
 
-void Matrix_Scale(Matrix* m, MAT_FLOAT scale, Matrix* out)
+void Matrix_Scale(Matrix *m, MAT_FLOAT scale, Matrix *out)
 {
     uint8_t rowSize, colSize;
     rowSize = m->row;
@@ -123,7 +121,7 @@ void Matrix_Scale(Matrix* m, MAT_FLOAT scale, Matrix* out)
     }
 }
 
-uint8_t Matrix_Multiply(Matrix* m1, Matrix* m2, Matrix* out)
+uint8_t Matrix_Multiply(Matrix *m1, Matrix *m2, Matrix *out)
 {
     if (out->row != m1->row || out->col != m2->col || m1->col != m2->row)
     {
@@ -148,7 +146,7 @@ uint8_t Matrix_Multiply(Matrix* m1, Matrix* m2, Matrix* out)
     return 1;
 }
 
-uint8_t Matrix_Transpose(Matrix* m, Matrix* out)
+uint8_t Matrix_Transpose(Matrix *m, Matrix *out)
 {
     if (out->row != m->col || out->col != m->row)
         return 0;
@@ -167,7 +165,7 @@ uint8_t Matrix_Transpose(Matrix* m, Matrix* out)
     return 1;
 }
 
-uint8_t Matrix_SelfTranspose(Matrix* m)
+uint8_t Matrix_SelfTranspose(Matrix *m)
 {
     if (m->col != m->row)
         return 0;
@@ -187,8 +185,8 @@ uint8_t Matrix_SelfTranspose(Matrix* m)
     return 1;
 }
 
-//ÈıÖÖ³õµÈĞĞ±ä»»
-static void SwapRow(Matrix* m, uint8_t row1, uint8_t row2)
+// ä¸‰ç§åˆç­‰è¡Œå˜æ¢
+static void SwapRow(Matrix *m, uint8_t row1, uint8_t row2)
 {
     MAT_FLOAT *pRow1, *pRow2;
     pRow1 = m->data + (int)row1 * m->col;
@@ -202,16 +200,16 @@ static void SwapRow(Matrix* m, uint8_t row1, uint8_t row2)
     }
 }
 
-static void ScaleRow(Matrix* m, uint8_t row, MAT_FLOAT scale)
+static void ScaleRow(Matrix *m, uint8_t row, MAT_FLOAT scale)
 {
-    MAT_FLOAT* pRow = m->data + (int)row * m->col;
+    MAT_FLOAT *pRow = m->data + (int)row * m->col;
     for (int i = 0; i < m->col; i++)
     {
         pRow[i] *= scale;
     }
 }
 
-static void AddScaleRow(Matrix* m, uint8_t srcRow, MAT_FLOAT scale, uint8_t dstRow)
+static void AddScaleRow(Matrix *m, uint8_t srcRow, MAT_FLOAT scale, uint8_t dstRow)
 {
     MAT_FLOAT *pSrcRow, *pDstRow;
     pSrcRow = m->data + (int)srcRow * m->col;
@@ -223,30 +221,29 @@ static void AddScaleRow(Matrix* m, uint8_t srcRow, MAT_FLOAT scale, uint8_t dstR
     }
 }
 
-uint8_t Matrix_Inverse(Matrix* m, Matrix* out)
+uint8_t Matrix_Inverse(Matrix *m, Matrix *out)
 {
     if (m->col != m->row || out->row != m->row || out->col != m->col)
         return 0;
 
     uint8_t size = m->row;
-    MAT_FLOAT* pRow;
+    MAT_FLOAT *pRow;
     const MAT_FLOAT tolerance = INFINIT_SMALL;
 
-    //out = I
+    // out = I
     Matrix_Identity(out);
 
-    
-    //ÏÈ´¦Àí³ÉÉÏÈı½Ç¾ØÕó
+    // å…ˆå¤„ç†æˆä¸Šä¸‰è§’çŸ©é˜µ
     for (int i = 0; i < size; i++)
     {
         pRow = m->data + i * size;
 
         if (FLOAT_NEAR(pRow[i], 0, tolerance))
-        { //½×ÌİÊ×ÔªËØÎª0,ĞèÒª½»»»ĞĞ
+        { // é˜¶æ¢¯é¦–å…ƒç´ ä¸º0,éœ€è¦äº¤æ¢è¡Œ
             int maxAbsRow = -1;
             MAT_FLOAT maxAbosute = 0;
 
-            //ÕÒµ½µ±Ç°ÁĞ¾ø¶ÔÖµ×î´óµÄÒ»ĞĞ, ½»»»
+            // æ‰¾åˆ°å½“å‰åˆ—ç»å¯¹å€¼æœ€å¤§çš„ä¸€è¡Œ, äº¤æ¢
             for (int k = i + 1; k < size; k++)
             {
                 MAT_FLOAT absolute = (MAT_FLOAT)fabs(MAT_IDX(*m, k, i));
@@ -258,14 +255,14 @@ uint8_t Matrix_Inverse(Matrix* m, Matrix* out)
             }
 
             if (maxAbsRow < 0)
-            {//singular
+            { // singular
                 return 0;
             }
             else
             {
-                //SwapRow(m, i, maxAbsRow); //¿ÉÓÅ»¯
-                //Ç°ÃæµÄÔªËØ¶¼ÊÇ0,²»ÓÃ½»»»
-                for (int x = i; x < size; x++) 
+                // SwapRow(m, i, maxAbsRow); //å¯ä¼˜åŒ–
+                // å‰é¢çš„å…ƒç´ éƒ½æ˜¯0,ä¸ç”¨äº¤æ¢
+                for (int x = i; x < size; x++)
                 {
                     MAT_FLOAT tmp = MAT_IDX(*m, i, x);
                     MAT_IDX(*m, i, x) = MAT_IDX(*m, maxAbsRow, x);
@@ -276,42 +273,41 @@ uint8_t Matrix_Inverse(Matrix* m, Matrix* out)
             }
         }
 
-        //½×ÌİÊ×ÔªËØ¹é1
+        // é˜¶æ¢¯é¦–å…ƒç´ å½’1
         MAT_FLOAT scale = 1 / pRow[i];
-        //ScaleRow(m, i, scale); //¿ÉÓÅ»¯
-        //Ç°ÃæµÄÔªËØ¶¼ÊÇ0,²»ÓÃ¼ÆËã
+        // ScaleRow(m, i, scale); //å¯ä¼˜åŒ–
+        // å‰é¢çš„å…ƒç´ éƒ½æ˜¯0,ä¸ç”¨è®¡ç®—
         for (int x = i; x < size; x++)
         {
             MAT_IDX(*m, i, x) *= scale;
         }
         ScaleRow(out, i, scale);
-        
-		//¶ÔÏÂÃæµÄĞĞÏûÔª
+
+        // å¯¹ä¸‹é¢çš„è¡Œæ¶ˆå…ƒ
         for (int k = i + 1; k < size; k++)
         {
             scale = -MAT_IDX(*m, k, i);
-            //AddScaleRow(m, i, scale, k);  //¿ÉÓÅ»¯
-            //Ç°ÃæµÄÔªËØ¶¼ÊÇ0,²»ÓÃ¼ÆËã
+            // AddScaleRow(m, i, scale, k);  //å¯ä¼˜åŒ–
+            // å‰é¢çš„å…ƒç´ éƒ½æ˜¯0,ä¸ç”¨è®¡ç®—
             for (int x = i; x < size; x++)
             {
                 MAT_IDX(*m, k, x) += MAT_IDX(*m, i, x) * scale;
             }
             AddScaleRow(out, i, scale, k);
         }
-
     }
 
-    //´ËÊ±¶Ô½ÇÏßÈ«²¿Îª1
-    //ÔÙÏûµôÓÒÉÏ½ÇµÄ²¿·Ö
+    // æ­¤æ—¶å¯¹è§’çº¿å…¨éƒ¨ä¸º1
+    // å†æ¶ˆæ‰å³ä¸Šè§’çš„éƒ¨åˆ†
     for (int i = size - 1; i >= 0; i--)
     {
         for (int k = i - 1; k >= 0; k--)
         {
             MAT_FLOAT scale = -MAT_IDX(*m, k, i);
-            //AddScaleRow(m, i, scale, k); //¿ÉÓÅ»¯
-            //¶ÔÓÚÃ¿Ò»ĞĞ,Ö»Òª°ÑÇ°ÃæĞĞµÄ´ËÁĞÔªËØÖÃ0¼´¿É
+            // AddScaleRow(m, i, scale, k); //å¯ä¼˜åŒ–
+            // å¯¹äºæ¯ä¸€è¡Œ,åªè¦æŠŠå‰é¢è¡Œçš„æ­¤åˆ—å…ƒç´ ç½®0å³å¯
             MAT_IDX(*m, k, i) = 0;
-            //MAT_IDX(*m, k, i) += MAT_IDX(*m, i, i) * scale;
+            // MAT_IDX(*m, k, i) += MAT_IDX(*m, i, i) * scale;
             AddScaleRow(out, i, scale, k);
         }
     }
@@ -319,10 +315,10 @@ uint8_t Matrix_Inverse(Matrix* m, Matrix* out)
     return 1;
 }
 
-char* Matrix_ToString(Matrix* m, char* buff, char* seperator)
+char *Matrix_ToString(Matrix *m, char *buff, char *seperator)
 {
     buff[0] = '\0';
-    for (int i = 0; i < m->row; i++) 
+    for (int i = 0; i < m->row; i++)
     {
         for (int k = 0; k < m->col; k++)
         {
@@ -335,24 +331,24 @@ char* Matrix_ToString(Matrix* m, char* buff, char* seperator)
     return buff;
 }
 
-//ĞĞ×î¼ò
-uint8_t Matrix_RREF(Matrix* m, MAT_FLOAT* solution)
+// è¡Œæœ€ç®€
+uint8_t Matrix_RREF(Matrix *m, MAT_FLOAT *solution)
 {
-    MAT_FLOAT* pRow;
+    MAT_FLOAT *pRow;
     const MAT_FLOAT tolerance = INFINIT_SMALL;
 
     int offset = 0;
-    //ÏÈ´¦Àí³É½×ÌİĞÎ
+    // å…ˆå¤„ç†æˆé˜¶æ¢¯å½¢
     for (int i = 0; i < m->row; i++)
     {
         pRow = m->data + i * m->col;
 
         if (FLOAT_NEAR(pRow[i + offset], 0, tolerance))
-        { //½×ÌİÊ×ÔªËØÎª0,ĞèÒª½»»»ĞĞ
+        { // é˜¶æ¢¯é¦–å…ƒç´ ä¸º0,éœ€è¦äº¤æ¢è¡Œ
             int maxAbsRow = -1;
             MAT_FLOAT maxAbosute = 0;
 
-            //ÕÒµ½µ±Ç°ÁĞ¾ø¶ÔÖµ×î´óµÄÒ»ĞĞ, ½»»»
+            // æ‰¾åˆ°å½“å‰åˆ—ç»å¯¹å€¼æœ€å¤§çš„ä¸€è¡Œ, äº¤æ¢
             for (int k = i + 1; k < m->row; k++)
             {
                 MAT_FLOAT absolute = (MAT_FLOAT)fabs(MAT_IDX(*m, k, i));
@@ -364,13 +360,13 @@ uint8_t Matrix_RREF(Matrix* m, MAT_FLOAT* solution)
             }
 
             if (maxAbsRow < 0)
-            {//singular
+            { // singular
                 offset++;
             }
             else
             {
-                //SwapRow(m, i, maxAbsRow); //¿ÉÓÅ»¯
-                //Ç°ÃæµÄÔªËØ¶¼ÊÇ0,²»ÓÃ½»»»
+                // SwapRow(m, i, maxAbsRow); //å¯ä¼˜åŒ–
+                // å‰é¢çš„å…ƒç´ éƒ½æ˜¯0,ä¸ç”¨äº¤æ¢
                 for (int x = i; x < m->col; x++)
                 {
                     MAT_FLOAT tmp = MAT_IDX(*m, i, x);
@@ -380,21 +376,21 @@ uint8_t Matrix_RREF(Matrix* m, MAT_FLOAT* solution)
             }
         }
 
-        //½×ÌİÊ×ÔªËØ¹é1
+        // é˜¶æ¢¯é¦–å…ƒç´ å½’1
         MAT_FLOAT scale = 1 / pRow[i + offset];
-        //ScaleRow(m, i, scale); //¿ÉÓÅ»¯
-        //Ç°ÃæµÄÔªËØ¶¼ÊÇ0,²»ÓÃ¼ÆËã
+        // ScaleRow(m, i, scale); //å¯ä¼˜åŒ–
+        // å‰é¢çš„å…ƒç´ éƒ½æ˜¯0,ä¸ç”¨è®¡ç®—
         for (int x = i; x < m->col; x++)
         {
             MAT_IDX(*m, i, x) *= scale;
         }
 
-        //¶ÔÏÂÃæµÄĞĞÏûÔª
+        // å¯¹ä¸‹é¢çš„è¡Œæ¶ˆå…ƒ
         for (int k = i + 1; k < m->row; k++)
         {
             scale = -MAT_IDX(*m, k, i);
-            //AddScaleRow(m, i, scale, k);  //¿ÉÓÅ»¯
-            //Ç°ÃæµÄÔªËØ¶¼ÊÇ0,²»ÓÃ¼ÆËã
+            // AddScaleRow(m, i, scale, k);  //å¯ä¼˜åŒ–
+            // å‰é¢çš„å…ƒç´ éƒ½æ˜¯0,ä¸ç”¨è®¡ç®—
             for (int x = i; x < m->col; x++)
             {
                 MAT_IDX(*m, k, x) += MAT_IDX(*m, i, x) * scale;
@@ -402,21 +398,21 @@ uint8_t Matrix_RREF(Matrix* m, MAT_FLOAT* solution)
         }
     }
 
-    //´ËÊ±¶Ô½ÇÏßÈ«²¿Îª1
-    //ÔÙÏûµôÓÒÉÏ½ÇµÄ²¿·Ö
+    // æ­¤æ—¶å¯¹è§’çº¿å…¨éƒ¨ä¸º1
+    // å†æ¶ˆæ‰å³ä¸Šè§’çš„éƒ¨åˆ†
     for (int i = m->row - 1; i >= 0; i--)
     {
         for (int k = i - 1; k >= 0; k--)
         {
             MAT_FLOAT scale = -MAT_IDX(*m, k, i);
-            //AddScaleRow(m, i, scale, k); //¿ÉÓÅ»¯
-            //¶ÔÓÚÃ¿Ò»ĞĞ,Ö»Òª°ÑÇ°ÃæĞĞµÄ´ËÁĞÔªËØÖÃ0¼´¿É
+            // AddScaleRow(m, i, scale, k); //å¯ä¼˜åŒ–
+            // å¯¹äºæ¯ä¸€è¡Œ,åªè¦æŠŠå‰é¢è¡Œçš„æ­¤åˆ—å…ƒç´ ç½®0å³å¯
             MAT_IDX(*m, k, i) = 0;
             MAT_IDX(*m, k, m->col - 1) += MAT_IDX(*m, i, m->col - 1) * scale;
         }
     }
 
-    for(int i = 0; i < m->row; i++)
+    for (int i = 0; i < m->row; i++)
     {
         solution[i] = MAT_IDX(*m, i, m->col - 1);
     }
